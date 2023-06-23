@@ -21,7 +21,7 @@ public class JobService {
     private JobLauncher jobLauncher;
 
     @Autowired
-    @Qualifier("firstJob")
+//    @Qualifier("firstJob")
     private Job firstJob;
 //    @Autowired
 //    @Qualifier("secondJob")

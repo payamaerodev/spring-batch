@@ -2,18 +2,32 @@ package com.example.demo.mode;
 
 import lombok.*;
 
-@Setter
 @Getter
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @ToString
 public class Student {
 
-    private Long id;
 
-    private String firstName;
+    private String id;
 
-    private String lastName;
+    private String firstname;
+
+    private String lastname;
 
     private String email;
+
+
+    public void setId(String id) {
+        this.id = id;
+    }
+    public void setFirstname(String firstname) {
+        this.firstname = firstname;
+    }
+    public void setLastname(String lastname) {
+        this.lastname = lastname;
+    }
+    public void setEmail(String email) {
+        this.email = email;
+    }
 }

@@ -5,9 +5,9 @@ import org.springframework.batch.item.ItemProcessor;
 import org.springframework.stereotype.Component;
 
 @Component
-public class Processor implements ItemProcessor<Student,Long> {
+public class Processor implements ItemProcessor<Student,String> {
     @Override
-    public Long process(Student item) throws Exception {
+    public String process(Student item) throws Exception {
         return item.getId();
     }
 }

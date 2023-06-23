@@ -1,27 +1,24 @@
 package com.example.demo.configuration;
+//
 
 import com.example.demo.mode.Student;
 import lombok.AllArgsConstructor;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
-import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.core.launch.support.RunIdIncrementer;
-import org.springframework.batch.core.step.tasklet.Tasklet;
 import org.springframework.batch.item.ItemProcessor;
-import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.batch.item.file.FlatFileItemReader;
 import org.springframework.batch.item.file.mapping.BeanWrapperFieldSetMapper;
 import org.springframework.batch.item.file.mapping.DefaultLineMapper;
 import org.springframework.batch.item.file.transform.DelimitedLineTokenizer;
-import org.springframework.batch.repeat.RepeatStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.FileSystemResource;
-import org.springframework.scheduling.annotation.EnableAsync;
 
 import java.io.File;
 
@@ -36,71 +33,67 @@ public class Config {
 
     @Autowired
     private ItemWriter writer;
-    @Autowired
-    private ItemReader reader;
+
+
     @Autowired
     private ItemProcessor processor;
 
-//    @Bean
-//    public Job secondJob() {
-//        return jobBuilderFactory.get("second Job")
-//                .incrementer(new RunIdIncrementer())
-////                .start(firstChunk())
-//                .start(step1())
-//                .build();
-//    }
-
-
+    //
     @Bean
-    public Step step1() {
 
-        return stepBuilderFactory.get("step1").tasklet(firstTasklet()).build();
-    }
-
-    @Bean
-    public Tasklet firstTasklet() {
-        return (contribution, sessionStatus) -> {
-            System.out.println("first tasklet  is ...");
-            return RepeatStatus.FINISHED;
-        };
-    }
-
-//
-    @Bean
-    public Job firstJob() {
+    public Job secondJob() throws Exception {
         return jobBuilderFactory.get("firstJob")
-               .incrementer(new RunIdIncrementer())
-//                .start(firstChunk())
+                .incrementer(new RunIdIncrementer())
                 .start(firstChunk())
                 .build();
     }
 
     @Bean
-    public Step firstChunk() {
+    public Step firstChunk() throws Exception {
         System.out.println("first job is running...");
         return stepBuilderFactory.get("firstChunk")
-                .<Integer, Long>chunk(4).reader(reader).processor(processor).writer(writer).build();
+                .<Student, Long>chunk(1).reader(reader()).writer(writer).build();
     }
+//    @Bean
+//    public FlatFileItemReader<Student> reader() {
+//        BeanWrapperFieldSetMapper<Student> fieldSetMapper = new BeanWrapperFieldSetMapper<>();
+//        fieldSetMapper.setTargetType(Student.class);
+//
+//        DelimitedLineTokenizer lineTokenizer = new DelimitedLineTokenizer();
+//        lineTokenizer.setDelimiter(",");
+//        lineTokenizer.setNames(new String[]{"firstName", "lastName"});
+//
+//        DefaultLineMapper<Student> lineMapper = new DefaultLineMapper<>();
+//        lineMapper.setFieldSetMapper(fieldSetMapper);
+//        lineMapper.setLineTokenizer(lineTokenizer);
+//
+//        FlatFileItemReader<Student> flatFileItemReader = new FlatFileItemReader<Student>();
+//        flatFileItemReader.setName("personItemReader");
+//        flatFileItemReader.setResource(new ClassPathResource("csv/persons.csv"));
+//        flatFileItemReader.setLineMapper(lineMapper);
+//        flatFileItemReader.setLinesToSkip(1);
+//
+//        return flatFileItemReader;
+//    }
 
 
     @Bean
-    public FlatFileItemReader<Student> flatFileItemReader()
-    {
+    public FlatFileItemReader<Student> reader() {
 
-        FlatFileItemReader<Student> flatFileItemReader=new FlatFileItemReader();
+        FlatFileItemReader<Student> flatFileItemReader = new FlatFileItemReader();
         //1-location of csv file
-        flatFileItemReader.setResource(new FileSystemResource(new File("C:\\Users\\Admin\\IdeaProjects\\spring\\5\\session21\\_03readers\\inputs\\students.csv")));
+        flatFileItemReader.setResource(new FileSystemResource(new File("C:\\Users\\payam\\Downloads\\batch\\src\\main\\resources\\students.csv")));
 
         //2-line Mapper
-        flatFileItemReader.setLineMapper(new DefaultLineMapper<Student>(){
+        flatFileItemReader.setLineMapper(new DefaultLineMapper<Student>() {
             {
-                setLineTokenizer(new DelimitedLineTokenizer(){
+                setLineTokenizer(new DelimitedLineTokenizer() {
                     {
                         // setDelimiter("|");
-                        setNames("ID","First Name" ,"Last Name" , "Email");
+                        setNames("ID", "Firstname", "Lastname", "Email");
                     }
                 });
-                setFieldSetMapper(new BeanWrapperFieldSetMapper<Student>(){
+                setFieldSetMapper(new BeanWrapperFieldSetMapper<Student>() {
                     {
                         setTargetType(Student.class);
                     }
@@ -113,3 +106,4 @@ public class Config {
     }
 
 }
+

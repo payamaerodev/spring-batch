@@ -14,10 +14,11 @@ public class StudentFieldSetMapper implements FieldSetMapper<Student> {
     public Student mapFieldSet(FieldSet fieldSet) throws BindException {
         Student player = new Student();
 
-        player.setId(fieldSet.readLong(0));
-        player.setLastName(fieldSet.readString(1));
-        player.setFirstName(fieldSet.readString(2));
-        player.setFirstName(fieldSet.readString(3));
+        player.setId(fieldSet.readString(0));
+
+        player.setFirstname(fieldSet.readString(2));
+        player.setLastname(fieldSet.readString(1));
+        player.setEmail(fieldSet.readString(3));
 
         return player;    }
 }
