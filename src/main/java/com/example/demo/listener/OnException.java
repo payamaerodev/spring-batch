@@ -19,11 +19,14 @@ public class OnException {
 
     @OnSkipInRead
     public void onException(Throwable throwable) throws IOException {
-        System.out.println("student = ");
-        FileWriter fileWriter = new FileWriter(new File("C:\\Users\\payam\\Downloads\\batch\\src\\main\\resources\\error.txt"));
-        if (throwable instanceof FlatFileParseException) {
-            fileWriter.write(((FlatFileParseException) throwable).getInput());
+        try {
+            System.out.println("student = ");
+            FileWriter fileWriter = new FileWriter(new File("E:\\error.txt"));
+//        if (throwable instanceof FlatFileParseException) {
+            fileWriter.write(((Exception) throwable).toString());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
-
     }
 }
+
