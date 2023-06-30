@@ -9,15 +9,11 @@ import lombok.*;
 @ToString
 public class Student {
 
-@JsonProperty("ID")
     private String id;
-    @JsonProperty("Firstname")
 
     private String firstname;
-    @JsonProperty("Lastname")
 
     private String lastname;
-    @JsonProperty("Email")
 
     private String email;
 
